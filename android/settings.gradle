@@ -1,0 +1,3 @@
+rootProject.name = 'reactJobsV2'
+
+include ':app'
