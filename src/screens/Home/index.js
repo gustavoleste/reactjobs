@@ -1,4 +1,5 @@
 import React from 'react'
+import Jobs from '../tabs/Jobs'
 import {Container, Header, Tab, Tabs, Text,Title,Icon,TabHeading, Body} from 'native-base'
 
 const Home = () => (
@@ -10,7 +11,7 @@ const Home = () => (
                 </Header>
                 <Tabs>
                         <Tab heading={<TabHeading><Icon name='work' type='MaterialIcons'/><Text>VAGAS</Text></TabHeading>}>
-                                
+                                <Jobs />
                         </Tab>                       
                         <Tab heading={<TabHeading><Icon  name='ios-bookmark' type='Ionicons' /><Text>SALVOS (0)</Text></TabHeading>}>
                               
