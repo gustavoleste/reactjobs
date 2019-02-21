@@ -1,8 +1,16 @@
 import React, {Component} from 'react'
 import {NetInfo} from 'react-native'
-import {Container, Content,Text,Button} from 'native-base'
 import {connect} from 'react-redux'
-import {request} from '../../../redux/actions'
+import {request} from '../../../redux/actions/api'
+import {sendToBookmark} from '../../../redux/actions/bookmark'
+import {
+        Container, 
+        Content,
+        Text,
+        Button,
+        List,
+        ListItem
+} from 'native-base'
 
 class Jobs extends Component{
         state ={
@@ -38,6 +46,25 @@ class Jobs extends Component{
                                         <Button onPress={()=>this.props.request(1,'alocação/Presencial')}>
                                         <Text>filters</Text>
                                 </Button>
+                                <List>
+                                {       this.props.data.jobs.length === 0 ? 
+                                        null :
+                                        this.props.data.jobs.map( item =>{
+                                                                                                        const salvo = this.props.bookmark.filter( job => job.id === item.id)
+                                                                                                        return(
+                                                                                                                <ListItem key={item.id}>
+                                                                                                                <Text>{item.id}</Text>
+                                                                                                                <Button
+                                                                                                                        onPress={()=>this.props.savebookmark(this.props.bookmark, item)}
+                                                                                                                >
+                                                                                                                        <Text>{salvo.length === 0 ? 'salvar': 'remover'}</Text>
+                                                                                                                </Button>
+                                                                                                        </ListItem>    
+                                                                                                        )}
+                                                                                                        
+                                                                                                )
+                                }
+                                </List>
                                 </Content>
                         </Container>
                 )
@@ -45,12 +72,14 @@ class Jobs extends Component{
 }
 
 const mapStateToProps = state => ({
-        data: state.data,
-        isFetching: state.isFetching
+        data: state.api.data,
+        isFetching: state.api.isFetching,
+        bookmark: state.bookmark.bookmark
 })
 
 const mapDispatchToProps = dispatch =>({
-        request: (page, filters)=> dispatch(request(page, filters))
+       request: (page, filters)=> dispatch(request(page, filters)),
+       savebookmark: (bookmark, item)=> dispatch(sendToBookmark(bookmark, item))
 }) 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Jobs)

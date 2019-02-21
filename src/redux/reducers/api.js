@@ -10,12 +10,10 @@ const INITIAL_STATE ={
                         last: 1
                 },
                 filters: ''
-
-        },
-        bookmark:[]
+        }
 }
 
-const reducer = (state = INITIAL_STATE, action) => {
+const api = (state = INITIAL_STATE, action) => {
         switch(action.type){
                 case 'REQUEST':
                         return{
@@ -47,4 +45,4 @@ const reducer = (state = INITIAL_STATE, action) => {
         }
 }
 
-export default reducer
+export default api
