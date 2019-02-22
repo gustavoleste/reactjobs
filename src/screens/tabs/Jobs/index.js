@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
-import {NetInfo} from 'react-native'
+import {NetInfo, AsyncStorage} from 'react-native'
 import {connect} from 'react-redux'
 import {request} from '../../../redux/actions/api'
-import {sendToBookmark} from '../../../redux/actions/bookmark'
+import {sendToBookmark, saveOnBookmark} from '../../../redux/actions/bookmark'
 import {
         Container, 
         Content,
@@ -20,8 +20,8 @@ class Jobs extends Component{
         async componentDidMount(){
                await this.isConnected()
                 if(this.state.isConnected){
-                        return this.props.request(1, '')
-                }
+                        this.props.request(1, '')
+                }             
         }
 
         isConnected = async () => {
@@ -32,6 +32,7 @@ class Jobs extends Component{
                         console.log(error)
                 }
         }
+       
         render(){
                 return(
                         <Container>
@@ -63,7 +64,7 @@ class Jobs extends Component{
                                                                                                         )}
                                                                                                         
                                                                                                 )
-                                }
+                                }                               
                                 </List>
                                 </Content>
                         </Container>
@@ -79,7 +80,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch =>({
        request: (page, filters)=> dispatch(request(page, filters)),
-       savebookmark: (bookmark, item)=> dispatch(sendToBookmark(bookmark, item))
+       savebookmark: (bookmark, item)=> dispatch(sendToBookmark(bookmark, item)),
+       syncBookmark: (bookmark)=> dispatch(saveOnBookmark(bookmark))
 }) 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Jobs)

@@ -1,5 +1,6 @@
 import React from 'react'
 import Jobs from '../tabs/Jobs'
+import Bookmark from   '../tabs/Bookmark'
 import {Container, Header, Tab, Tabs, Text,Title,Icon,TabHeading, Body} from 'native-base'
 
 const Home = () => (
@@ -14,7 +15,7 @@ const Home = () => (
                                 <Jobs />
                         </Tab>                       
                         <Tab heading={<TabHeading><Icon  name='ios-bookmark' type='Ionicons' /><Text>SALVOS (0)</Text></TabHeading>}>
-                              
+                              <Bookmark/>
                         </Tab>
                 </Tabs>
         </Container>
