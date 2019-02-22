@@ -2,8 +2,7 @@ import React from 'react'
 import {Card,CardItem, Text,Button,Body, H3} from 'native-base'
 import Labels from './Labels'
 
-const JobCard = ({data}) => {
-        //console.log('data:',data.labels.length)
+const JobCard = ({data, selectItem}) => {
         return(
         <Card>
                 <CardItem >
@@ -16,7 +15,7 @@ const JobCard = ({data}) => {
                 </CardItem>
                 <CardItem footer>
                         <Body>
-                                <Button block  primary small><Text>detalhes</Text></Button>
+                                <Button block  primary small onPress={()=> selectItem(data)}><Text>detalhes</Text></Button>
                         </Body>
                 </CardItem>
         </Card>

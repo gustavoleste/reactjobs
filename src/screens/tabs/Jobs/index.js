@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react'
+import React, {Component} from 'react'
 import {NetInfo, Modal} from 'react-native'
 import {connect} from 'react-redux'
 import {request} from '../../../redux/actions/api'
@@ -6,6 +6,7 @@ import {sendToBookmark, saveOnBookmark} from '../../../redux/actions/bookmark'
 import CardMessage from '../../../components/CardMessage'
 import JobsList from '../../../components/JobsList'
 import Filters from '../../../components/Filters'
+import Details from '../../../components/Details'
 import {
         Container, 
         Fab,
@@ -17,7 +18,8 @@ class Jobs extends Component{
         state ={
                 isConnected: false,
                 showFilter: false,
-                showDetails: false
+                showDetails: false,
+                item: {}
         }
 
         async componentDidMount(){
@@ -33,6 +35,19 @@ class Jobs extends Component{
                                 showFilter: !prevState.showFilter
                         }
                 ))
+        }
+        
+        detailsVisibility = () =>{
+                this.setState(prevState =>(
+                        {
+                                showDetails: !prevState.showDetails
+                        }
+                ))
+        }
+
+        selectItem = item =>{
+                this.setState({item})
+                this.detailsVisibility()
         }
 
         isConnected = async () => {
@@ -56,7 +71,7 @@ class Jobs extends Component{
                                         } 
                                         {
                                                 this.props.data.jobs.length < 1 ? null :
-                                                <JobsList data={this.props.data}/>
+                                                <JobsList data={this.props.data} selectItem={this.selectItem}/>
                                          }
                                          {
                                                  this.props.isFetching ? <CardMessage message='Carregando vagas...'/> : null
@@ -72,7 +87,14 @@ class Jobs extends Component{
                                                 visible={this.state.showFilter}
                                                 onRequestClose={this.filterVisibility}
                                         >
-                                                <Filters close={this.filterVisibility}/>
+                                                <Filters close={this.filterVisibility} />
+                                        </Modal>
+                                        <Modal 
+                                                animationType='slide'
+                                                visible={this.state.showDetails}
+                                                onRequestClose={this.detailsVisibility}
+                                        >
+                                                <Details close={this.detailsVisibility} item={this.state.item} />
                                         </Modal>                        
                         </Container>
                 )

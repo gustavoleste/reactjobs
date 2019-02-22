@@ -5,12 +5,12 @@ import JobCard from '../JobCard'
 import {connect} from 'react-redux'
 import {request} from '../../redux/actions/api'
 
-const JobsList = ({data, request, isFetching}) => {
-        console.log('data', data)
+const JobsList = ({data, request, isFetching, selectItem}) => {
+        //console.log('select:', selectItem)
         return(
                 <FlatList 
                         data={data.jobs}
-                        renderItem={ ({item})=>  <JobCard data={item}/>}
+                        renderItem={ ({item})=>  <JobCard data={item} selectItem={selectItem}/>}
                         keyExtractor={item => String(item.id)}
                         onEndReachedThreshold={0.01}
                         onEndReached={()=> data.pages.next > data.pages.last ? null : request(data.pages.next, data.filters)}
