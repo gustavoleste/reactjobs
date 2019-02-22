@@ -5,19 +5,18 @@ import {
         Card,
         CardItem,
         Text,
-        Icon
 } from  'native-base'
-const ConectionCard = () => (
+const cardMessage = ({message}) => (
                   <Container>
                         <Content>
                                 <Card>
                                         <CardItem>
-                                                <Text>Sem conexão. <Icon name='emoji-sad' type='Entypo' /></Text>
+                                                <Text>{message}</Text>
                                         </CardItem>
                                 </Card>
                         </Content>
                 </Container>
 )
 
-export default ConectionCard;
+export default cardMessage
 

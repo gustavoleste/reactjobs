@@ -1,23 +1,23 @@
-import React, {Component} from 'react'
-import {NetInfo, AsyncStorage} from 'react-native'
+import React, {Component, Fragment} from 'react'
+import {NetInfo, Modal} from 'react-native'
 import {connect} from 'react-redux'
 import {request} from '../../../redux/actions/api'
 import {sendToBookmark, saveOnBookmark} from '../../../redux/actions/bookmark'
-import ConectionCard from '../../../components/ConectionCard'
+import CardMessage from '../../../components/CardMessage'
 import JobsList from '../../../components/JobsList'
+import Filters from '../../../components/Filters'
 import {
         Container, 
-        Content,
-        Text,
-        Button,
-        List,
-        ListItem,
-        Card
+        Fab,
+        Icon,
+
 } from 'native-base'
 
 class Jobs extends Component{
         state ={
-                isConnected: false
+                isConnected: false,
+                showFilter: false,
+                showDetails: false
         }
 
         async componentDidMount(){
@@ -25,6 +25,14 @@ class Jobs extends Component{
                 if(this.state.isConnected){
                         this.props.request(1, '')
                 }             
+        }
+
+        filterVisibility = () =>{
+                this.setState(prevState =>(
+                        {
+                                showFilter: !prevState.showFilter
+                        }
+                ))
         }
 
         isConnected = async () => {
@@ -39,8 +47,33 @@ class Jobs extends Component{
         render(){
                 return(
                         <Container>
-                                        {this.state.isConnected ? null : <ConectionCard/>}
-                                        {this.props.data.jobs.length === 0 ? null : <JobsList data={this.props.data} />}                                
+                                        {
+                                                this.state.isConnected ? null : <CardMessage message='Sem conexão.'/>
+                                        }
+                                        {
+                                                this.state.isConnected && this.props.data.jobs.length < 1 && !this.props.isFetching ? 
+                                                <CardMessage message='Nenhuma vaga encontrada.'/> : null
+                                        } 
+                                        {
+                                                this.props.data.jobs.length < 1 ? null :
+                                                <JobsList data={this.props.data}/>
+                                         }
+                                         {
+                                                 this.props.isFetching ? <CardMessage message='Carregando vagas...'/> : null
+                                         }
+                                         <Fab 
+                                                onPress={this.filterVisibility}
+                                                position='bottomRight' 
+                                                active={false}>
+                                                <Icon name='filter' type='FontAwesome'  color='#3F51B5'/>
+                                        </Fab> 
+                                        <Modal 
+                                                animationType='slide'
+                                                visible={this.state.showFilter}
+                                                onRequestClose={this.filterVisibility}
+                                        >
+                                                <Filters close={this.filterVisibility}/>
+                                        </Modal>                        
                         </Container>
                 )
         }
