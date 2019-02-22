@@ -2,7 +2,7 @@ import {firstPageResponse, nextPageResponse} from '../actions/api'
 import {saveOnBookmark} from '../actions/bookmark'
 import {takeLatest, put, call} from 'redux-saga/effects'
 import axios from 'axios'
-const baseURL = 'https://api.github.com/repos/react-brasil/vagas/issues?per_page=4'
+const baseURL = 'https://api.github.com/repos/react-brasil/vagas/issues?per_page=5'
 
 function* rootSaga(){
         yield takeLatest('REQUEST', sendRequest)

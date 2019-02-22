@@ -3,13 +3,16 @@ import {NetInfo, AsyncStorage} from 'react-native'
 import {connect} from 'react-redux'
 import {request} from '../../../redux/actions/api'
 import {sendToBookmark, saveOnBookmark} from '../../../redux/actions/bookmark'
+import ConectionCard from '../../../components/ConectionCard'
+import JobsList from '../../../components/JobsList'
 import {
         Container, 
         Content,
         Text,
         Button,
         List,
-        ListItem
+        ListItem,
+        Card
 } from 'native-base'
 
 class Jobs extends Component{
@@ -36,37 +39,8 @@ class Jobs extends Component{
         render(){
                 return(
                         <Container>
-                                <Content>                                        
-                                        <Text>Is fetching: {this.props.isFetching ? 'yes' : 'no'}</Text>
-                                        <Text>current page: {this.props.data.pages.current}</Text>
-                                        <Text>next page: {this.props.data.pages.next}</Text>
-                                        <Text>last page: {this.props.data.pages.last}</Text>
-                                        <Button onPress={()=>this.props.request(this.props.data.pages.next,'')}>
-                                                <Text>next page</Text>
-                                        </Button>
-                                        <Button onPress={()=>this.props.request(1,'alocação/Presencial')}>
-                                        <Text>filters</Text>
-                                </Button>
-                                <List>
-                                {       this.props.data.jobs.length === 0 ? 
-                                        null :
-                                        this.props.data.jobs.map( item =>{
-                                                                                                        const salvo = this.props.bookmark.filter( job => job.id === item.id)
-                                                                                                        return(
-                                                                                                                <ListItem key={item.id}>
-                                                                                                                <Text>{item.id}</Text>
-                                                                                                                <Button
-                                                                                                                        onPress={()=>this.props.savebookmark(this.props.bookmark, item)}
-                                                                                                                >
-                                                                                                                        <Text>{salvo.length === 0 ? 'salvar': 'remover'}</Text>
-                                                                                                                </Button>
-                                                                                                        </ListItem>    
-                                                                                                        )}
-                                                                                                        
-                                                                                                )
-                                }                               
-                                </List>
-                                </Content>
+                                        {this.state.isConnected ? null : <ConectionCard/>}
+                                        {this.props.data.jobs.length === 0 ? null : <JobsList data={this.props.data} />}                                
                         </Container>
                 )
         }
