@@ -10,8 +10,7 @@ import Details from '../../../components/Details'
 import {
         Container, 
         Fab,
-        Icon,
-
+        Icon
 } from 'native-base'
 
 class Jobs extends Component{

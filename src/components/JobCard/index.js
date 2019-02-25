@@ -2,8 +2,7 @@ import React from 'react'
 import {Card,CardItem, Text,Button,Body, H3} from 'native-base'
 import Labels from './Labels'
 
-const JobCard = ({data, selectItem}) => {
-        return(
+const JobCard = ({data, selectItem}) => (
         <Card>
                 <CardItem >
                         <H3>{data.title}</H3>                        
@@ -21,5 +20,5 @@ const JobCard = ({data, selectItem}) => {
         </Card>
 
 )
-}
+
 export default JobCard

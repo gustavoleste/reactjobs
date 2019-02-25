@@ -5,9 +5,7 @@ import JobCard from '../JobCard'
 import {connect} from 'react-redux'
 import {request} from '../../redux/actions/api'
 
-const JobsList = ({data, request, isFetching, selectItem}) => {
-        //console.log('select:', selectItem)
-        return(
+const JobsList = ({data, request, isFetching, selectItem}) => (
                 <FlatList 
                         data={data.jobs}
                         renderItem={ ({item})=>  <JobCard data={item} selectItem={selectItem}/>}
@@ -16,8 +14,7 @@ const JobsList = ({data, request, isFetching, selectItem}) => {
                         onEndReached={()=> data.pages.next > data.pages.last ? null : request(data.pages.next, data.filters)}
                         ListFooterComponent={()=> isFetching ? <Spinner color='#3F51B5'/> : null}
                 />
-        )
-}
+)
 
 const mapStateToProps = state => ({
         isFetching: state.api.isFetching

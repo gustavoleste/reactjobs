@@ -9,7 +9,11 @@ import {
         Text, 
         Fab, 
         Icon, 
-        Container
+        Container,
+        Header,
+        Left,
+        Title,
+        Button
 } from 'native-base'
 
 class Filters  extends Component{
@@ -59,6 +63,16 @@ class Filters  extends Component{
         render(){
                 return(
                         <Container>
+                                <Header>
+                                        <Left>                                                
+                                                <Button transparent onPress={()=>this.props.close()}>
+                                                        <Icon name='close' type='AntDesign'/>
+                                                </Button>                                                
+                                        </Left>
+                                        <Body>
+                                                <Title>FILTROS</Title>
+                                        </Body>
+                                </Header>
                                 <Content>
                                         <ListItem>
                                                 <CheckBox  checked={this.state.labels[0].show} color='#1ab2ff' onPress={()=> this.changeCheck(0)} />

@@ -1,35 +1,48 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import {sendToBookmark} from '../../../redux/actions/bookmark'
+import CardMessage from '../../../components/CardMessage'
+import BookmarkList from '../../../components/BookmarkList'
+import Details from '../../../components/Details'
+import {Modal} from 'react-native'
 import {
-        Container, 
-        Content, 
-        List,
-        ListItem, 
-        Button,
-        Text
+        Container
 } from 'native-base'
 
-class Bookmark extends Component {        
+class Bookmark extends Component { 
+
+        state ={
+                showDetails: false,
+                item: {}
+        }
+
+        detailsVisibility = () =>{
+                this.setState(prevState =>(
+                        {
+                                showDetails: !prevState.showDetails
+                        }
+                ))
+        }
+
+        selectItem = item =>{
+                this.setState({item})
+                this.detailsVisibility()
+        }      
        
         render() {
                 return (
                         <Container>
-                                <Content>
-                                        <List>
-                                               {        this.props.bookmark.length === 0 ?
-                                                        <Text>Nada salvo</Text>:
-                                                        this.props.bookmark.map(item => 
-                                                                <ListItem key={item.id}>
-                                                                        <Text>{item.id}</Text>
-                                                                        <Button onPress={()=>this.props.remove(this.props.bookmark, item)}>
-                                                                                <Text>Remover</Text>
-                                                                        </Button>
-                                                                </ListItem>
-                                                         )
-                                                }
-                                        </List>
-                                </Content>
+                                {this.props.bookmark.length < 1 ?
+                                <CardMessage message='Nenhum item salvo.'/> : 
+                                <BookmarkList data={this.props.bookmark} selectItem={this.selectItem}/>
+                                }
+                                <Modal 
+                                        animationType='slide'
+                                        visible={this.state.showDetails}
+                                        onRequestClose={this.detailsVisibility}
+                                >
+                                        <Details close={this.detailsVisibility} item={this.state.item} />
+                                </Modal>
                         </Container>
                 )
         }
