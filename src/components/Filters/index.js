@@ -1,6 +1,7 @@
 import React, { Component}from 'react'
 import {request} from '../../redux/actions/api'
 import {connect} from 'react-redux'
+import LabelBox from './LabelBox'
 import {
          Content, 
         ListItem, 
@@ -13,28 +14,29 @@ import {
         Header,
         Left,
         Title,
-        Button
+        Button,
+        Right
 } from 'native-base'
 
 class Filters  extends Component{
         state ={
                 labels: [
-                        { name: 'alocação/Em-Aberto', show: false},
-                        { name: 'alocação/Flexível', show: false},
-                        { name: 'alocação/Fora-do-país', show: false},
-                        { name: 'alocação/Presencial', show: false},
-                        { name: 'alocação/Remoto', show: false},
-                        { name: 'experiência/Em-Aberto', show: false},
-                        { name: 'experiência/estágio', show: false},
-                        { name: 'experiência/Júnior', show: false},
-                        { name: 'experiência/Pleno', show: false},
-                        { name: 'experiência/Senior', show: false},
-                        { name: 'regime/A-Combinar', show: false},
-                        { name: 'regime/CLT', show: false},
-                        { name: 'regime/Estágio', show: false},
-                        { name: 'regime/Freela', show: false},
-                        { name: 'regime/Outros', show: false},
-                        { name: 'regime/PJ', show: false}
+                        { name: 'alocação/Em-Aberto', color:'#1ab2ff',checked: false},
+                        { name: 'alocação/Flexível', color:'#1ab2ff',checked: false},
+                        { name: 'alocação/Fora-do-país', color:'#1ab2ff',checked: false},
+                        { name: 'alocação/Presencial', color:'#1ab2ff',checked: false},
+                        { name: 'alocação/Remoto', color:'#1ab2ff',checked: false},
+                        { name: 'experiência/Em-Aberto', color:'#990000',checked: false},
+                        { name: 'experiência/estágio', color:'#990000',checked: false},
+                        { name: 'experiência/Júnior', color:'#990000',checked: false},
+                        { name: 'experiência/Pleno', color:'#990000',checked: false},
+                        { name: 'experiência/Senior', color:'#990000',checked: false},
+                        { name: 'regime/A-Combinar', color:'#00cc00',checked: false},
+                        { name: 'regime/CLT', color:'#00cc00',checked: false},
+                        { name: 'regime/Estágio', color:'#00cc00',checked: false},
+                        { name: 'regime/Freela', color:'#00cc00',checked: false},
+                        { name: 'regime/Outros', color:'#00cc00',checked: false},
+                        { name: 'regime/PJ', color:'#00cc00',checked: false}
                 ],
                 pages: {
                         current: 1,
@@ -43,17 +45,48 @@ class Filters  extends Component{
                 }
         }
 
-        changeCheck = index =>{
-                this.setState( prevState => {
-                        const {name, show} = prevState.labels[index]
-                        const newState = {...prevState}
-                        newState.labels[index] = {name, show: !show}
-                        return newState
+        componentDidMount(){
+                this.syncLabels(this.props.filters)
+        }
+
+        changeCheck = item =>{
+                const { name, color, checked} = item
+                const index = this.state.labels.indexOf(item)
+                const newLabels = [...this.state.labels]
+                newLabels[index] = {name, color, checked: !checked }
+                this.setState({
+                        labels: newLabels
                 })
         }
 
+        clearFilters = () =>{
+                const newLabels = this.state.labels
+                newLabels.map( label => label.checked = false)
+                this.setState({
+                        labels: newLabels
+                })
+        }
+
+        syncLabels = filters =>{
+                if(filters.trim() === ''){
+                        return console.log('vazio')
+                }
+                const filtersCheckedTrue = filters.split(',')
+                const filtersNames = this.state.labels.map(item => item.name)
+                const filtersIndex = filtersCheckedTrue.map( item => filtersNames.indexOf(item))
+                const newLabels = [...this.state.labels]
+                filtersIndex.map( item => {
+                        const {name, color, checked} = newLabels[item]
+                        newLabels[item] = {name, color, checked: !checked}
+                })
+                this.setState({
+                        labels: newLabels
+                })
+                
+        }
+
         updateFilters = () =>{
-                const labels = this.state.labels.filter( label => label.show === true)
+                const labels = this.state.labels.filter( label => label.checked === true)
                 const labelsName = labels.map( label => label.name)
                 const filters = labelsName.join(',')
                 this.props.request(1,filters)
@@ -61,6 +94,7 @@ class Filters  extends Component{
         }
 
         render(){
+                console.log(this.props.filters)
                 return(
                         <Container>
                                 <Header>
@@ -72,104 +106,14 @@ class Filters  extends Component{
                                         <Body>
                                                 <Title>FILTROS</Title>
                                         </Body>
+                                        <Right>
+                                                <Button hasText transparent onPress={this.clearFilters}>
+                                                        <Text>Limpar Filtros</Text>
+                                                </Button>
+                                        </Right>
                                 </Header>
                                 <Content>
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[0].show} color='#1ab2ff' onPress={()=> this.changeCheck(0)} />
-                                                <Body>
-                                                        <Text>alocação/Em-Aberto</Text>
-                                                </Body>
-                                        </ListItem>
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[1].show} color='#1ab2ff' onPress={()=> this.changeCheck(1)} />
-                                                <Body>
-                                                        <Text>alocação/Flexível</Text>
-                                                </Body>
-                                        </ListItem>
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[2].show} color='#1ab2ff' onPress={()=> this.changeCheck(2)} />
-                                                <Body>
-                                                        <Text>alocação/Fora-do-país</Text>
-                                                </Body>
-                                        </ListItem>
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[3].show} color='#1ab2ff' onPress={()=> this.changeCheck(3)} />
-                                                <Body>
-                                                        <Text>alocação/Presencial</Text>
-                                                </Body>
-                                        </ListItem>
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[4].show} color='#1ab2ff' onPress={()=> this.changeCheck(4)} />
-                                                <Body>
-                                                        <Text>alocação/Remoto</Text>
-                                                </Body>
-                                        </ListItem>                
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[5].show} color='#990000' onPress={()=> this.changeCheck(5)} />
-                                                <Body>
-                                                        <Text>experiência/Em-Aberto</Text>
-                                                </Body>
-                                        </ListItem>
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[6].show} color='#990000' onPress={()=> this.changeCheck(6)} />
-                                                <Body>
-                                                        <Text>experiência/estágio</Text>
-                                                </Body>
-                                        </ListItem>
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[7].show} color='#990000' onPress={()=> this.changeCheck(7)} />
-                                                <Body>
-                                                        <Text>experiência/Júnior</Text>
-                                                </Body>
-                                        </ListItem>
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[8].show} color='#990000' onPress={()=> this.changeCheck(8)} />
-                                                <Body>
-                                                        <Text>experiência/Pleno</Text>
-                                                </Body>
-                                        </ListItem>
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[9].show} color='#990000' onPress={()=> this.changeCheck(9)} />
-                                                <Body>
-                                                        <Text>experiência/Senior</Text>
-                                                </Body>
-                                        </ListItem>
-                                <ListItem>
-                                                <CheckBox  checked={this.state.labels[10].show} color='#00cc00' onPress={()=> this.changeCheck(10)} />
-                                                <Body>
-                                                        <Text>regime/A-Combinar</Text>
-                                                </Body>
-                                        </ListItem>
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[11].show} color='#00cc00' onPress={()=> this.changeCheck(11)} />
-                                                <Body>
-                                                        <Text>regime/CLT</Text>
-                                                </Body>
-                                        </ListItem>
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[12].show} color='#00cc00' onPress={()=> this.changeCheck(12)} />
-                                                <Body>
-                                                        <Text>regime/Estágio</Text>
-                                                </Body>
-                                        </ListItem>
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[13].show} color='#00cc00' onPress={()=> this.changeCheck(13)} />
-                                                <Body>
-                                                        <Text>regime/Freela</Text>
-                                                </Body>
-                                        </ListItem>
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[14].show} color='#00cc00' onPress={()=> this.changeCheck(14)} />
-                                                <Body>
-                                                        <Text>regime/Outros</Text>
-                                                </Body>
-                                        </ListItem>
-                                        <ListItem>
-                                                <CheckBox  checked={this.state.labels[15].show} color='#00cc00' onPress={()=> this.changeCheck(15)}/>
-                                                <Body>
-                                                        <Text>regime/PJ</Text>
-                                                </Body>
-                                        </ListItem>                                        
+                                        {this.state.labels.map(label => <LabelBox  key={label.name} item={label} changeCheck={this.changeCheck} /> )}                                        
                                 </Content>
                                 <Fab onPress={()=> this.updateFilters()} active={false} position="bottomRight"  style={{ backgroundColor: '#3F51B5' }}>
                                                 <Icon name='check' type='FontAwesome' />
@@ -179,8 +123,12 @@ class Filters  extends Component{
         }
 }
 
+const mapStateToProps = state => ({
+        filters: state.api.data.filters
+})
+
 const mapDispatchToProps = dispatch =>({
         request: (page, filters)=> dispatch(request(page, filters))
 })
 
-export default connect(null, mapDispatchToProps)(Filters)
+export default connect(mapStateToProps, mapDispatchToProps)(Filters)

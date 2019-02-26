@@ -78,8 +78,10 @@ class Jobs extends Component{
                                          <Fab 
                                                 onPress={this.filterVisibility}
                                                 position='bottomRight' 
-                                                active={false}>
-                                                <Icon name='filter' type='FontAwesome'  color='#3F51B5'/>
+                                                active={false}
+                                                style={{backgroundColor: '#3F51B5'}}
+                                                >
+                                                <Icon name='filter' type='FontAwesome'/>
                                         </Fab> 
                                         <Modal 
                                                 animationType='slide'
