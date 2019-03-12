@@ -4,8 +4,6 @@ import {connect} from 'react-redux'
 import LabelBox from './LabelBox'
 import {
          Content, 
-        ListItem, 
-        CheckBox, 
         Body,
         Text, 
         Fab, 
@@ -69,7 +67,7 @@ class Filters  extends Component{
 
         syncLabels = filters =>{
                 if(filters.trim() === ''){
-                        return console.log('vazio')
+                        return 
                 }
                 const filtersCheckedTrue = filters.split(',')
                 const filtersNames = this.state.labels.map(item => item.name)
@@ -94,7 +92,6 @@ class Filters  extends Component{
         }
 
         render(){
-                console.log(this.props.filters)
                 return(
                         <Container>
                                 <Header>

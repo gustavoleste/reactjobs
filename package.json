@@ -12,6 +12,7 @@
     "react": "16.6.3",
     "react-native": "0.58.5",
     "react-native-markdown-renderer": "^3.2.8",
+    "react-native-splash-screen": "^3.2.0",
     "react-redux": "^6.0.1",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
